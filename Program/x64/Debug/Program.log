@@ -1,3 +1,0 @@
-﻿  Material.cpp
-G:\_Graphics\_MyWorks\#PBR\Program\BCGL\Material.cpp(19,18): warning C4305: “=”: 从“double”到“float”截断
-  Program.vcxproj -> G:\_Graphics\_MyWorks\#PBR\x64\Debug\Program.exe
