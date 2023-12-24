@@ -5,16 +5,16 @@ CLighting::CLighting(void)
 {
 	lightSource = new CLightSource[4];
 	lightSource[0].lightPosition = CP3(1000, 1000, 1000);
-	lightSource[0].lightColor = CRGB(70.0, 70.0, 70.0);
+	lightSource[0].lightColor = CRGB(8.0, 8.0, 8.0);
 
 	lightSource[1].lightPosition = CP3(-1000, 800, 1000);
-	lightSource[1].lightColor = CRGB(15.0, 15.0, 15.0);
+	lightSource[1].lightColor = CRGB(5.0, 5.0, 5.0);
 
 	lightSource[2].lightPosition = CP3(500, 0, 1000);
-	lightSource[2].lightColor = CRGB(15.0, 15.0, 15.0);
+	lightSource[2].lightColor = CRGB(5.0, 5.0, 5.0);
 
 	lightSource[3].lightPosition = CP3(-700, -100, 1000);
-	lightSource[3].lightColor = CRGB(15.0, 15.0, 15.0);
+	lightSource[3].lightColor = CRGB(1.0, 1.0, 1.0);
 }
 
 CLighting::~CLighting(void)

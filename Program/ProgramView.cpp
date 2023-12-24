@@ -172,7 +172,11 @@ void CProgramView::DoubleBuffer(CDC* pDC)
 	memDC.SetViewportExt(rect.Width(), -rect.Height());
 	memDC.SetViewportOrg(rect.Width() / 2, rect.Height() / 2);
 
-	DrawObject(&memDC);// 绘制图形
+	frameBuffer = new CCanvas(rect.Width(), rect.Height());
+	DrawObject(&memDC, frameBuffer);// 绘制图形
+	CBitmap frameBufBitmap; 
+	frameBufBitmap.CreateBitmap(rect.Width(), rect.Height(), 1, 32, frameBuffer->GetBufferData());
+	memDC.SelectObject(frameBufBitmap);
 
 	pDC->BitBlt(rect.left, rect.top, rect.Width(), rect.Height(),
 		&memDC, -rect.Width() / 2, -rect.Height() / 2, SRCCOPY);// 将内存DC中的位图拷贝到显示DC
@@ -180,9 +184,10 @@ void CProgramView::DoubleBuffer(CDC* pDC)
 	memDC.SelectObject(pOldBitmap);
 	NewBitmap.DeleteObject();
 	memDC.DeleteDC();
+	delete frameBuffer;
 }
 
-void CProgramView::DrawObject(CDC* pDC)
+void CProgramView::DrawObject(CDC* pDC, CCanvas* frameBuffer)
 {
 	gui.DrawCoordinateGrid(pDC);
 	if (skybox != NULL)
@@ -286,7 +291,7 @@ void CProgramView::DrawObject(CDC* pDC)
 		}
 		case CProgramView::PBR:
 		{
-			if (isRButtonDown)
+			if (false/*isRButtonDown*/)
 			{
 				model->DrawWireframe(pDC);
 			}
@@ -302,14 +307,14 @@ void CProgramView::DrawObject(CDC* pDC)
 				model->SetMaterial(&material);
 				model->SetScene(&scene);
 				model->SetZBuffer(pZBuffer);
-				model->PBRendering(pDC);
+				model->PBRendering(pDC, frameBuffer);
 				delete pZBuffer;
 			}
 			break;
 		}
 		case CProgramView::PBRxIBL:
 		{
-			if (isRButtonDown)
+			if (false/*isRButtonDown*/)
 			{
 				model->DrawWireframe(pDC);
 			}
@@ -325,7 +330,7 @@ void CProgramView::DrawObject(CDC* pDC)
 				model->SetMaterial(&material);
 				model->SetScene(&scene);
 				model->SetZBuffer(pZBuffer);
-				model->PBRenderingwithIBL(pDC);
+				model->PBRenderingwithIBL(pDC, frameBuffer);
 				delete pZBuffer;
 			}
 			break;
@@ -573,8 +578,8 @@ void CProgramView::OnLoadEnvironmentTex()
 		envTexture->ReadImagefData();
 		skybox = new CSkybox();
 		int envType = 0;
-		if (imgPath == "G:\\_Graphics\\_MyWorks\\#PBR\\PictureSource\\HDRi\\blue_photo_studio_4k.hdr") envType = 0;
-		if (imgPath == "G:\\_Graphics\\_MyWorks\\#PBR\\PictureSource\\HDRi\\music_hall_01_4k.hdr") envType = 1;
+		if (pFileDlg.GetFileName() == "blue_photo_studio_4k.hdr") envType = 0;
+		if (pFileDlg.GetFileName() == "music_hall_01_4k.hdr") envType = 1;
 		skybox->ReadSubImg(envType);
 		//skybox->SpheretoEnvCube(envTexture);
 		//skybox->SpheretoIrrCube(envTexture);

@@ -557,7 +557,7 @@ void CModel::BlinnPhongShader(CDC* pDC)
 	}
 }
 
-void CModel::PBRendering(CDC* pDC)
+void CModel::PBRendering(CDC* pDC, CCanvas* frameBuffer)
 {
 	for (int nTriangle = 0; nTriangle < nTotalTriangle; nTriangle++)
 	{
@@ -707,7 +707,8 @@ void CModel::PBRendering(CDC* pDC)
 								CRGB I = scene->PBR(currentWorldPoint, material, currentNormal);
 								I.Reinhard();
 								//I.Normalize();
-								pDC->SetPixelV(x, y, CRGBtoRGB(I));
+								//pDC->SetPixelV(x, y, CRGBtoRGB(I));
+								frameBuffer->SetPixel(x, y, I);
 							}
 						}
 					}
@@ -717,7 +718,7 @@ void CModel::PBRendering(CDC* pDC)
 	}
 }
 
-void CModel::PBRenderingwithIBL(CDC* pDC)
+void CModel::PBRenderingwithIBL(CDC* pDC, CCanvas* frameBuffer)
 {
 	//#pragma omp parallel for
 	for (int nTriangle = 0; nTriangle < nTotalTriangle; nTriangle++)
@@ -866,7 +867,8 @@ void CModel::PBRenderingwithIBL(CDC* pDC)
 
 								CRGB I = scene->EnvNewPBR(currentWorldPoint, material, currentNormal);
 								I.Reinhard();
-								pDC->SetPixelV(x, y, CRGBtoRGB(I));
+								//pDC->SetPixelV(x, y, CRGBtoRGB(I));
+								frameBuffer->SetPixel(x, y, I);
 							}
 						}
 					}

@@ -7,6 +7,7 @@
 #include"BCGL/Model.h"
 #include"BCGL/Transform3.h"
 #include"BCGL/Skybox.h"
+#include"BCGL/Canvas.h"
 
 class CProgramView : public CView
 {
@@ -22,7 +23,7 @@ public:
 public:
 	void OffsetClientRect(CDC* pDC);
 	void DoubleBuffer(CDC* pDC);// 双缓冲
-	void DrawObject(CDC* pDC);
+	void DrawObject(CDC* pDC, CCanvas* frameBuffer);
 // 重写
 public:
 	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
@@ -64,6 +65,7 @@ protected:
 	CSkybox* skybox;// 天空盒（立方体贴图）
 	CTexture* envTexture;// 环境贴图
 	CZBuffer* zbuffer;// z缓冲区
+	CCanvas* frameBuffer;// 帧缓冲区
 	BOOL isRButtonDown;
 	CPoint lastMousePoint;
 // 生成的消息映射函数

@@ -187,6 +187,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BCGL\Canvas.h" />
     <ClInclude Include="BCGL\Face.h" />
     <ClInclude Include="BCGL\GUI.h" />
     <ClInclude Include="BCGL\Lighting.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BCGL\Canvas.cpp" />
     <ClCompile Include="BCGL\Face.cpp" />
     <ClCompile Include="BCGL\GUI.cpp" />
     <ClCompile Include="BCGL\Lighting.cpp" />

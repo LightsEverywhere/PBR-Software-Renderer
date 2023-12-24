@@ -108,6 +108,9 @@
     <ClInclude Include="ImgLoad\stb_image_write.h">
       <Filter>ImgLoad</Filter>
     </ClInclude>
+    <ClInclude Include="BCGL\Canvas.h">
+      <Filter>BCGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp">
@@ -181,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="ImgLoad\stb_image_write.cpp">
       <Filter>ImgLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="BCGL\Canvas.cpp">
+      <Filter>BCGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
