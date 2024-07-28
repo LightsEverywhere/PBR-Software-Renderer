@@ -268,7 +268,7 @@ void CProgramView::DrawObject(CDC* pDC, CCanvas* frameBuffer)
 			break;
 		case CProgramView::phongShading:
 		{
-			if (isRButtonDown)
+			if (false/*isRButtonDown*/)
 			{
 				model->DrawWireframe(pDC);
 			}
@@ -284,7 +284,7 @@ void CProgramView::DrawObject(CDC* pDC, CCanvas* frameBuffer)
 				model->SetMaterial(&material);
 				model->SetScene(&scene);
 				model->SetZBuffer(pZBuffer);
-				model->BlinnPhongShader(pDC);
+				model->BlinnPhongShader(pDC, frameBuffer);
 				delete pZBuffer;
 			}
 			break;

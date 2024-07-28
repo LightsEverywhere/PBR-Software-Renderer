@@ -443,7 +443,7 @@ void CModel::DrawWireframe(CDC* pDC)
 	}
 }
 
-void CModel::BlinnPhongShader(CDC* pDC)
+void CModel::BlinnPhongShader(CDC* pDC, CCanvas* frameBuffer)
 {
 	//#pragma omp parallel for
 	for (int nTriangle = 0; nTriangle < nTotalTriangle; nTriangle++)
@@ -546,7 +546,8 @@ void CModel::BlinnPhongShader(CDC* pDC)
 								CRGB I = scene->SimpleIlluminate(currentWorldPoint, camera->GetEye(), currentNormal, material);
 								I.Reinhard();
 								//I.Normalize();
-								pDC->SetPixelV(x, y, CRGBtoRGB(I));
+								//pDC->SetPixelV(x, y, CRGBtoRGB(I));
+								frameBuffer->SetPixel(x, y, I);
 							}
 						}
 					}

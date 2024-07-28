@@ -37,7 +37,7 @@ public:
 
 	void DrawPointCloud(CDC* pDC);// 绘制点云
 	void DrawWireframe(CDC* pDC);// 绘制线框
-	void BlinnPhongShader(CDC* pDC);// Blinn-Phong明暗处理 rasterization
+	void BlinnPhongShader(CDC* pDC, CCanvas* fameBuffer);// Blinn-Phong明暗处理 rasterization
 	void PBRendering(CDC* pDC, CCanvas* frameBuffer);// 基于物理渲染
 	void PBRenderingwithIBL(CDC* pDC, CCanvas* frameBuffer);// 基于物理渲染xIBL
 public:
