@@ -111,6 +111,9 @@
     <ClInclude Include="BCGL\Canvas.h">
       <Filter>BCGL</Filter>
     </ClInclude>
+    <ClInclude Include="BCGL\MaterialSlot.h">
+      <Filter>BCGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp">
@@ -186,6 +189,9 @@
       <Filter>ImgLoad</Filter>
     </ClCompile>
     <ClCompile Include="BCGL\Canvas.cpp">
+      <Filter>BCGL</Filter>
+    </ClCompile>
+    <ClCompile Include="BCGL\MaterialSlot.cpp">
       <Filter>BCGL</Filter>
     </ClCompile>
   </ItemGroup>

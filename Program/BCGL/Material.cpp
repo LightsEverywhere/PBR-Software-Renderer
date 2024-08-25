@@ -4,21 +4,30 @@
 CMaterial::CMaterial(void)
 {
 	// Data for Blinn-Phong
-	ambientRef = CRGB(0.03, 0.03, 0.03);
-	diffuseRef = CRGB(0.3, 0.9, 0.4);
-	specularRef = CRGB(1.0, 1.0, 1.0);
-	specularExponent = 200;// 高光指数
+	ambientRef = CRGB(0.0, 0.0, 0.0);
+	diffuseRef = CRGB(0.0, 0.0, 0.0);
+	specularRef = CRGB(0.0, 0.0, 0.0);
+	specularExponent = 0.0;
+
 	// Data for PBR
-	//albedo = CRGB(0.3, 0.9, 0.4);
-	albedo = CRGB(0.070, 0.103, 0.045);
-	//albedo = CRGB(0.5, 0.4, 0.1);
-	//albedo = CRGB(0.5, 0.0, 0.0);
-	//albedo = CRGB(0.01, 0.01, 0.01);
-	//metallic = 0.95;
+	albedo = CRGB(0.0, 0.0, 0.0);
 	metallic = 0.0;
 	roughness = 0.01;
 	F0 = CRGB(0.04, 0.04, 0.04);// 基础反射率(Base Reflectivity)
 	F0 = mix(F0, albedo, metallic);// 线性混叠函数，输出 (1-metallic)F0 + metallic*albedo , 用于调整金属的基础反射率
+
+	// 预设属性
+	//ambientRef = CRGB(0.03, 0.03, 0.03);
+	//diffuseRef = CRGB(0.3, 0.9, 0.4);
+	//specularRef = CRGB(1.0, 1.0, 1.0);
+	//specularExponent = 200;
+
+	//albedo = CRGB(0.3, 0.9, 0.4);
+	//albedo = CRGB(0.070, 0.103, 0.045);
+	//albedo = CRGB(0.5, 0.4, 0.1);
+	//albedo = CRGB(0.5, 0.0, 0.0);
+	//albedo = CRGB(0.01, 0.01, 0.01);
+	//metallic = 0.95;
 }
 
 CMaterial::~CMaterial(void)

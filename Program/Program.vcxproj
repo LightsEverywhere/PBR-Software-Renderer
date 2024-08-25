@@ -193,6 +193,7 @@
     <ClInclude Include="BCGL\Lighting.h" />
     <ClInclude Include="BCGL\LightSource.h" />
     <ClInclude Include="BCGL\Material.h" />
+    <ClInclude Include="BCGL\MaterialSlot.h" />
     <ClInclude Include="BCGL\Model.h" />
     <ClInclude Include="BCGL\P2.h" />
     <ClInclude Include="BCGL\P3.h" />
@@ -225,6 +226,7 @@
     <ClCompile Include="BCGL\Lighting.cpp" />
     <ClCompile Include="BCGL\LightSource.cpp" />
     <ClCompile Include="BCGL\Material.cpp" />
+    <ClCompile Include="BCGL\MaterialSlot.cpp" />
     <ClCompile Include="BCGL\Model.cpp" />
     <ClCompile Include="BCGL\P2.cpp" />
     <ClCompile Include="BCGL\P3.cpp" />

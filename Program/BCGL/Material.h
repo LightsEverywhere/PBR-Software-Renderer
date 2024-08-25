@@ -6,10 +6,12 @@ class CMaterial
 public:
 	CMaterial(void);
 	virtual ~CMaterial(void);
+
 	void SetAmbientRef(CRGB ambientRef);// 设置环境反射率
 	void SetDiffuseRef(CRGB diffuseRef);// 设置漫反射率
 	void SetSpecularRef(CRGB specularRef);// 设置镜面反射率
-	void SetSpecularExponent(double n);
+	void SetSpecularExponent(double n);// 设置高光指数
+
 	void SetAlbedo(CRGB albedo);// 设置反照率
 	void SetMetallic(float metallic);// 设置金属度
 	void SetRoughness(float roughness);// 设置粗糙度
@@ -22,6 +24,7 @@ public:
 	CRGB diffuseRef;// 漫反射率
 	CRGB specularRef;// 镜面反射率
 	double specularExponent;// 高光指数
+
 	// Data for PBR
 	CRGB albedo;// 反照率
 	float metallic;// 金属度
