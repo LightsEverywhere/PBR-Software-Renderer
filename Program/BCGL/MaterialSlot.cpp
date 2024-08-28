@@ -21,12 +21,67 @@ void CMaterialSlot::ReadMaterial(CString mtlPath)
 	}
 	CString strLine;
 
+	
+
 	while (file.ReadString(strLine))
 	{
 		strLine.Trim();
 		if (strLine.Find(CString("newmtl")))// if(strLine.Left(7)=="newmtl "
 		{
+			CMaterial newMaterial;
+			
 
+			CString matDataStr;
+			while (file.ReadString(matDataStr))
+			{
+				if (matDataStr.Left(3) == "Ns ")
+				{
+					newMaterial.specularExponent = static_cast<float>(_tstof(matDataStr.Mid(3)));
+				}
+				else if (matDataStr.Left(3) == "Ka ")
+				{
+					_stscanf_s(matDataStr.Mid(3), _T("%f, %f, %f"),
+						&newMaterial.ambientRef.red,
+						&newMaterial.ambientRef.green,
+						&newMaterial.ambientRef.blue);
+				}
+				else if (matDataStr.Left(3) == "Kd ")
+				{
+					_stscanf_s(matDataStr.Mid(3), _T("%f, %f, %f"),
+						&newMaterial.diffuseRef.red,
+						&newMaterial.diffuseRef.green,
+						&newMaterial.diffuseRef.blue);
+				}
+				else if (matDataStr.Left(3) == "Ks ")
+				{
+					_stscanf_s(matDataStr.Mid(3), _T("%f, %f, %f"),
+						&newMaterial.specularRef.red,
+						&newMaterial.specularRef.green,
+						&newMaterial.specularRef.blue);
+				}
+				else if (matDataStr.Left(3) == "Ke ")
+				{
+					_stscanf_s(matDataStr.Mid(3), _T("%f, %f, %f"),
+						&newMaterial.emissiveCol.red,
+						&newMaterial.emissiveCol.green,
+						&newMaterial.emissiveCol.blue);
+				}
+				else if (matDataStr.Left(3) == "Ni ")
+				{
+					newMaterial.refractionIdx = static_cast<float>(_tstof(matDataStr.Mid(3)));
+				}
+				else if (matDataStr.Left(2) == "D ")
+				{
+					newMaterial.dissolve = static_cast<float>(_tstof(matDataStr.Mid(2)));
+				}
+				else if (matDataStr.Left(6) == "illum ")
+				{
+					newMaterial.illuminationModel = static_cast<float>(_tstof(matDataStr.Mid(6)));
+				}
+
+			}
+
+			Materials.push_back()
 		}
 	}
 

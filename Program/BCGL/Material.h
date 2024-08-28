@@ -20,10 +20,23 @@ public:
 	void UpdateF0();
 public:
 	// Data for Blinn-Phong
+	double specularExponent;// 高光指数 1~1000 as usual
 	CRGB ambientRef;// 环境反射率
 	CRGB diffuseRef;// 漫反射率
 	CRGB specularRef;// 镜面反射率
-	double specularExponent;// 高光指数
+	CRGB emissiveCol;// 自发光颜色
+	float refractionIdx;// 折射率 1.0~2.0 as usual
+	float dissolve;// 透明度 0.0 total transparency, 1.0 total opacity (变量名称有待修正)
+
+	/**
+	 *  使用的光照模型
+	 *	0: 颜色不开启光照。
+	 *	1: 光照模型为漫反射和环境光，不包括镜面反射。
+	 *	2: 光照模型为漫反射、环境光和镜面反射（即高光）。
+	 */
+	int illuminationModel = 2;// 当前默认全部开启
+
+
 
 	// Data for PBR
 	CRGB albedo;// 反照率
