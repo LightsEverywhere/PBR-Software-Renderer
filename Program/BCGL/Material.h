@@ -36,13 +36,14 @@ public:
 	 */
 	int illuminationModel = 2;// 当前默认全部开启
 
-
-
 	// Data for PBR
 	CRGB albedo;// 反照率
 	float metallic;// 金属度
 	float roughness;// 表面粗糙度
 	CRGB ao;// 环境光遮蔽
 	CRGB F0;// 基础反射率
+
+	// Info
+	CString name;// 材质名称
 };
 
