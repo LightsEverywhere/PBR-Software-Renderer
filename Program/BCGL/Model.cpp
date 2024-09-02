@@ -207,6 +207,11 @@ void CModel::ReadNormal(void)
 	file.Close();
 }
 
+void CModel::ReadMaterials(void)
+{
+
+}
+
 void CModel::ReadFace(void)
 {
 	CStdioFile file;

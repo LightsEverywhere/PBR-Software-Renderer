@@ -9,6 +9,7 @@
 #include"Lighting.h"
 #include"Texture.h"
 #include"Canvas.h"
+#include "MaterialSlot.h"
 
 class CModel
 {
@@ -19,6 +20,7 @@ public:
 	void ReadVertex(void);// 读入顶点信息
 	void ReadTexture(void);// 读入材质采样信息
 	void ReadNormal(void);// 读入法向信息
+	void ReadMaterials(void);// 读入材质信息
 	void ReadFace(void);// 读入面信息
 	void ReadTriangle(void);// 获取片元信息
 	void GetScreenBox(void);// 计算模型投影后的屏幕包围盒			//可以考虑作为预处理项，直接背面剔除+面排序
@@ -47,6 +49,7 @@ public:
 	CT2* textureCoord;// 纹理采样点队列
 	CVector3* normal;// 法向队列
 	CFace* face;// 面队列
+	CMaterialSlot materialSlot;// 材质槽
 	CTriangle* triangle;// 图元(三角形)队列
 	int nTotalVertex;// 顶点总数
 	int nTotalTexture;// 纹理采样点总数
