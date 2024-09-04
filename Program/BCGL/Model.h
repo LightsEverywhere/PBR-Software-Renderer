@@ -22,6 +22,7 @@ public:
 	void ReadNormal(void);// 读入法向信息
 	void ReadMaterials(void);// 读入材质信息
 	void ReadFace(void);// 读入面信息
+	void ReadFaceWithMat(void);// 读入包含材质的面信息
 	void ReadTriangle(void);// 获取片元信息
 	void GetScreenBox(void);// 计算模型投影后的屏幕包围盒			//可以考虑作为预处理项，直接背面剔除+面排序
 
@@ -44,12 +45,12 @@ public:
 	void PBRenderingwithIBL(CDC* pDC, CCanvas* frameBuffer);// 基于物理渲染xIBL
 public:
 	CString fileName;// obj文件名
+
 	// 模型数据
 	CP3* vertex;// 顶点队列
 	CT2* textureCoord;// 纹理采样点队列
 	CVector3* normal;// 法向队列
 	CFace* face;// 面队列
-	CMaterialSlot materialSlot;// 材质槽
 	CTriangle* triangle;// 图元(三角形)队列
 	int nTotalVertex;// 顶点总数
 	int nTotalTexture;// 纹理采样点总数
@@ -62,7 +63,9 @@ public:
 	int xLeft, xRight, yTop, yBottom;// 投影后的屏幕包围盒
 	int screenH, screenW;// 投影后屏幕包围盒尺寸
 	float scalar;
+
 	// 模型属性
+	CMaterialSlot materialSlot;// 材质槽
 	CMaterial* material;// 物体材质
 	CTexture* targetTexture;// 目标纹理
 	CTexture* targetAlbedo;// 目标反照率纹理

@@ -258,6 +258,57 @@ void CModel::ReadFace(void)
 	file.Close();
 }
 
+void CModel::ReadFaceWithMat(void)
+{
+	CStdioFile file;
+	if (!file.Open(fileName, CFile::modeRead))
+	{
+		return;
+	}
+	face = new CFace[nTotalFace];
+	CString strLine;
+	int index = 0;// 队列索引
+	while (file.ReadString(strLine) && index < nTotalFace)
+	{
+		if (strLine.Left(7) == "usemtl ")
+		{
+			CString matName = strLine.Mid(7);
+		}
+
+		if (strLine[0] == 'f' && strLine[1] == ' ')
+		{
+			// 计算面顶点数量
+			int count = 0;// '/'符计数
+			for (int i = 0; i < strLine.GetLength(); i++)
+			{
+				if (strLine[i] == '/')
+					count++;
+			}
+			face[index].vertexNumber = count / 2;// 面顶点数
+			face[index].InitializeQueue();// 初始化面的索引队列
+
+			CString* str = new CString[face[index].vertexNumber];
+
+			for (int j = 0; j < face[index].vertexNumber; j++)
+			{
+				AfxExtractSubString(str[j], strLine, j + 1, ' ');
+				CString strs[3];
+				for (int k = 0; k < 3; k++)
+				{
+					AfxExtractSubString(strs[k], str[j], k, '/');
+				}
+				face[index].vertexIndex[j] = _wtof(strs[0]) - 1;
+				face[index].textureIndex[j] = _wtof(strs[1]) - 1;
+				face[index].normalIndex[j] = _wtof(strs[2]) - 1;
+			}
+
+			delete[] str;
+			index++;
+		}
+	}
+	file.Close();
+}
+
 void CModel::ReadTriangle(void)
 {
 	// 计算片元数量

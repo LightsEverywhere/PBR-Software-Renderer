@@ -461,11 +461,11 @@ void CProgramView::OnImportObj()
 		model->scalar = nScale;
 		transform.Scale(nScale * 1.3, nScale * 1.3, nScale * 1.3);
 		model->camera = &mainCamera;// 将模型绑定到主相机
-		if (albedoTex != NULL) model->BindAlbedo(albedoTex);
-		if (normalTex != NULL) model->BindNormal(normalTex);
+		if (albedoTex	 != NULL) model->BindAlbedo(albedoTex);
+		if (normalTex	 != NULL) model->BindNormal(normalTex);
 		if (roughnessTex != NULL) model->BindRoughness(roughnessTex);
-		if (metallicTex != NULL) model->BindMetallic(metallicTex);
-		if (aoTex != NULL) model->BindAO(aoTex);
+		if (metallicTex	 != NULL) model->BindMetallic(metallicTex);
+		if (aoTex		 != NULL) model->BindAO(aoTex);
 	}
 	Invalidate(FALSE);
 }

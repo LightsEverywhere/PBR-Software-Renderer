@@ -22,7 +22,7 @@ public:
 	// Data for Blinn-Phong
 	double specularExponent;// 高光指数 1~1000 as usual
 	CRGB ambientRef;// 环境反射率
-	CRGB diffuseRef;// 漫反射率
+	CRGB diffuseRef;// 漫反射率（基础色）
 	CRGB specularRef;// 镜面反射率
 	CRGB emissiveCol;// 自发光颜色
 	float refractionIdx;// 折射率 1.0~2.0 as usual
