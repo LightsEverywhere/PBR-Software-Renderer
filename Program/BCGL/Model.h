@@ -24,6 +24,7 @@ public:
 	void ReadFace(void);// 读入面信息
 	void ReadFaceWithMat(void);// 读入包含材质的面信息
 	void ReadTriangle(void);// 获取片元信息
+	void ReadTriangleWithMat(void);
 	void GetScreenBox(void);// 计算模型投影后的屏幕包围盒			//可以考虑作为预处理项，直接背面剔除+面排序
 
 	void BindTexture(CTexture* targetTexture);// 绑定纹理对象
@@ -57,6 +58,7 @@ public:
 	int nTotalNormal;// 法向总数
 	int nTotalFace;// 面总数
 	int nTotalTriangle;// 三角形（图元）总数
+
 	float maxY, maxX, maxZ, minY, minX, minZ;// 模型体包围盒
 	float modelLength, modelWidth, modelHeight;// 模型的长宽高
 	CP3 centerPoint;//模型中心点

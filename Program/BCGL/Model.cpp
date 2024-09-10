@@ -265,14 +265,18 @@ void CModel::ReadFaceWithMat(void)
 	{
 		return;
 	}
+
 	face = new CFace[nTotalFace];
 	CString strLine;
 	int index = 0;// 队列索引
+	CString materialName;
+
 	while (file.ReadString(strLine) && index < nTotalFace)
 	{
 		if (strLine.Left(7) == "usemtl ")
 		{
-			CString matName = strLine.Mid(7);
+			materialName = strLine.Mid(7);
+			continue;
 		}
 
 		if (strLine[0] == 'f' && strLine[1] == ' ')
@@ -297,10 +301,11 @@ void CModel::ReadFaceWithMat(void)
 				{
 					AfxExtractSubString(strs[k], str[j], k, '/');
 				}
-				face[index].vertexIndex[j] = _wtof(strs[0]) - 1;
+				face[index].vertexIndex[j]	= _wtof(strs[0]) - 1;
 				face[index].textureIndex[j] = _wtof(strs[1]) - 1;
-				face[index].normalIndex[j] = _wtof(strs[2]) - 1;
+				face[index].normalIndex[j]	= _wtof(strs[2]) - 1;
 			}
+			face[index].materialName = materialName;
 
 			delete[] str;
 			index++;
@@ -363,6 +368,71 @@ void CModel::ReadTriangle(void)
 				triangle[index].textureIndex[i] = face[nFace].textureIndex[i];
 				triangle[index].normalIndex[i] = face[nFace].normalIndex[i];
 			}
+			index++;
+		}
+	}
+}
+
+void CModel::ReadTriangleWithMat(void)
+{
+	// 计算片元数量
+	for (int nFace = 0; nFace < nTotalFace; nFace++)
+	{
+		if (face[nFace].vertexNumber == 4)
+		{
+			nTotalTriangle += 2;
+		}
+		else
+		{
+			nTotalTriangle += 1;
+		}
+	}
+	// 读取片元队列
+	triangle = new CTriangle[nTotalTriangle];
+	int index = 0;// 片元队列索引
+	for (int nFace = 0; nFace < nTotalFace; nFace++)
+	{
+		if (face[nFace].vertexNumber == 4)
+		{
+			// 传索引
+			for (int i = 0; i < 3; i++)
+			{
+				triangle[index].vertexIndex[i]	= face[nFace].vertexIndex[i];
+				triangle[index].textureIndex[i] = face[nFace].textureIndex[i];
+				triangle[index].normalIndex[i]	= face[nFace].normalIndex[i];
+			}
+			triangle[index].materialName = face[nFace].materialName;
+			index++;
+
+			for (int i = 0; i < 3; i++)
+			{
+				if (i == 0)
+				{
+					triangle[index].vertexIndex[i]	= face[nFace].vertexIndex[i];
+					triangle[index].textureIndex[i] = face[nFace].textureIndex[i];
+					triangle[index].normalIndex[i]	= face[nFace].normalIndex[i];
+
+				}
+				else
+				{
+					triangle[index].vertexIndex[i]	= face[nFace].vertexIndex[i + 1];
+					triangle[index].textureIndex[i] = face[nFace].textureIndex[i + 1];
+					triangle[index].normalIndex[i]	= face[nFace].normalIndex[i + 1];
+				}
+			}
+			triangle[index].materialName = face[nFace].materialName;
+			index++;
+		}
+
+		if (face[nFace].vertexNumber == 3)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				triangle[index].vertexIndex[i]	= face[nFace].vertexIndex[i];
+				triangle[index].textureIndex[i] = face[nFace].textureIndex[i];
+				triangle[index].normalIndex[i]	= face[nFace].normalIndex[i];
+			}
+			triangle[index].materialName = face[nFace].materialName;
 			index++;
 		}
 	}

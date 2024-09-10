@@ -13,5 +13,7 @@ public:
 	int* vertexIndex;
 	int* normalIndex;
 	int* textureIndex;
+
+	CString materialName;// Ãæ²ÄÖÊÃû³Æ
 };
 
