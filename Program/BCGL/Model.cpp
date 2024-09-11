@@ -209,6 +209,16 @@ void CModel::ReadNormal(void)
 
 void CModel::ReadMaterials(void)
 {
+	CString mtlFileName;
+	mtlFileName = fileName.Left(fileName.ReverseFind(_T('.'))) + _T(".mtl");
+
+	CStdioFile file;
+	if (!file.Open(mtlFileName, CFile::modeRead))
+	{
+		return;
+	}
+
+
 
 }
 
