@@ -10,6 +10,7 @@
 #include"Texture.h"
 #include"Canvas.h"
 #include "MaterialSlot.h"
+#include <map>
 
 class CModel
 {
@@ -41,9 +42,12 @@ public:
 
 	void DrawPointCloud(CDC* pDC);// 绘制点云
 	void DrawWireframe(CDC* pDC);// 绘制线框
-	void BlinnPhongShader(CDC* pDC, CCanvas* fameBuffer);// Blinn-Phong明暗处理 rasterization
+	void BlinnPhongShader(CDC* pDC, CCanvas* frameBuffer);// Blinn-Phong明暗处理 rasterization
 	void PBRendering(CDC* pDC, CCanvas* frameBuffer);// 基于物理渲染
 	void PBRenderingwithIBL(CDC* pDC, CCanvas* frameBuffer);// 基于物理渲染xIBL
+
+	void BlinnPhongUseMTL(CDC* pDC, CCanvas* frameBuffer);// 应用Material Slot的BlinnPhong光照
+
 public:
 	CString fileName;// obj文件名
 
@@ -68,6 +72,8 @@ public:
 
 	// 模型属性
 	CMaterialSlot materialSlot;// 材质槽
+	std::map<CString, CMaterial> MatNametoMat;
+
 	CMaterial* material;// 物体材质
 	CTexture* targetTexture;// 目标纹理
 	CTexture* targetAlbedo;// 目标反照率纹理

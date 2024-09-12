@@ -212,14 +212,12 @@ void CModel::ReadMaterials(void)
 	CString mtlFileName;
 	mtlFileName = fileName.Left(fileName.ReverseFind(_T('.'))) + _T(".mtl");
 
-	CStdioFile file;
-	if (!file.Open(mtlFileName, CFile::modeRead))
+	materialSlot.ReadMaterials(mtlFileName);
+
+	for (auto mat : materialSlot.Materials)
 	{
-		return;
+		MatNametoMat.insert({ mat.name, mat });
 	}
-
-
-
 }
 
 void CModel::ReadFace(void)
@@ -1012,5 +1010,121 @@ void CModel::PBRenderingwithIBL(CDC* pDC, CCanvas* frameBuffer)
 				}
 			}
 		}
+	}
+}
+
+void CModel::BlinnPhongUseMTL(CDC* pDC, CCanvas* frameBuffer)
+{
+	//#pragma omp parallel for
+	for (int nTriangle = 0; nTriangle < nTotalTriangle; nTriangle++)
+	{
+		// 边向量
+		CVector3 sideVector01 = CVector3(vertex[triangle[nTriangle].vertexIndex[0]], vertex[triangle[nTriangle].vertexIndex[1]]).Normalized();
+		CVector3 sideVector02 = CVector3(vertex[triangle[nTriangle].vertexIndex[0]], vertex[triangle[nTriangle].vertexIndex[2]]).Normalized();
+		CVector3 triangleNormal = CrossProduct(sideVector01, sideVector02).Normalized();// 图元（面）法向
+		CVector3 viewVector = CVector3(vertex[triangle[nTriangle].vertexIndex[0]], camera->GetEye()).Normalized();// 图元视向量
+
+		if (DotProduct(viewVector, triangleNormal) >= 0)// 背面剔除
+		{
+			// 求TBN矩阵
+			CVector3 TBN[3];// TBN矩阵
+			if (targetNormal != NULL)
+			{
+				// UV坐标差
+				double deltaU1, deltaV1, deltaU2, deltaV2;
+				deltaU1 = (textureCoord[triangle[nTriangle].textureIndex[1]] - textureCoord[triangle[nTriangle].textureIndex[0]]).u;
+				deltaV1 = (textureCoord[triangle[nTriangle].textureIndex[1]] - textureCoord[triangle[nTriangle].textureIndex[0]]).v;
+				deltaU2 = (textureCoord[triangle[nTriangle].textureIndex[2]] - textureCoord[triangle[nTriangle].textureIndex[1]]).u;
+				deltaV2 = (textureCoord[triangle[nTriangle].textureIndex[2]] - textureCoord[triangle[nTriangle].textureIndex[1]]).v;
+
+				// 切线空间各坐标分量
+				CVector3 T, B, N;
+				CVector3 edge01, edge02;
+				edge01 = CVector3(vertex[triangle[nTriangle].vertexIndex[0]], vertex[triangle[nTriangle].vertexIndex[1]]).Normalized() * sqrt(deltaU1 * deltaU1 + deltaV1 * deltaV1);
+				edge02 = CVector3(vertex[triangle[nTriangle].vertexIndex[1]], vertex[triangle[nTriangle].vertexIndex[2]]).Normalized() * sqrt(deltaU2 * deltaU2 + deltaV2 * deltaV2);
+				T = ((deltaV2 * edge01 - deltaV1 * edge02) / (deltaU1 * deltaV2 - deltaU2 * deltaV1)).Normalized();//理论上可以不做单位化
+				B = ((deltaU1 * edge02 - deltaU2 * edge01) / (deltaU1 * deltaV2 - deltaU2 * deltaV1)).Normalized();
+				N = triangleNormal;
+
+				TBN[0] = T, TBN[1] = B, TBN[2] = N;
+			}
+
+			CP3 point[3];
+			for (int j = 0; j < 3; j++)
+			{
+				point[j] = camera->PerspectiveProjection(vertex[triangle[nTriangle].vertexIndex[j]]);
+			}
+			// 包围盒
+			int Xmax = max(ceil(point[0].x), max(ceil(point[1].x), ceil(point[2].x)));
+			int Xmin = min(floor(point[0].x), min(floor(point[1].x), floor(point[2].x)));
+			int Ymax = max(ceil(point[0].y), max(ceil(point[1].y), ceil(point[2].y)));
+			int Ymin = min(floor(point[0].y), min(floor(point[1].y), floor(point[2].y)));
+
+			for (int x = Xmin; x < Xmax; x++)
+			{
+				for (int y = Ymin; y < Ymax; y++)
+				{
+					if ((x + zbuffer->nWidth / 2) < zbuffer->nWidth && (y + zbuffer->nHeight / 2) < zbuffer->nHeight
+						&& (x + zbuffer->nWidth / 2) >= 0 && (y + zbuffer->nHeight / 2) >= 0)// zbuffer适应调整
+					{
+						if (InsideTriangle((float)x + 0.5, (float)y + 0.5, point))
+						{
+							double Area = point[0].x * (point[1].y - point[2].y) + point[1].x * (point[2].y - point[0].y) + point[2].x * (point[0].y - point[1].y);
+							double Area0 = x * (point[1].y - point[2].y) + point[1].x * (point[2].y - y) + point[2].x * (y - point[1].y);
+							double Area1 = point[0].x * (y - point[2].y) + x * (point[2].y - point[0].y) + point[2].x * (point[0].y - y);
+							double Area2 = point[0].x * (point[1].y - y) + point[1].x * (y - point[0].y) + x * (point[0].y - point[1].y);
+							double alpha, beta, gamma;// 重心坐标
+							alpha = Area0 / Area, beta = Area1 / Area, gamma = Area2 / Area;
+							// 当前点伪深度
+							double depth = point[0].z * alpha + point[1].z * beta + point[2].z * gamma;
+							if (depth <= zbuffer->depthBuffer[x + zbuffer->nWidth / 2][y + zbuffer->nHeight / 2])
+							{
+								zbuffer->depthBuffer[x + zbuffer->nWidth / 2][y + zbuffer->nHeight / 2] = depth;
+
+								// 透视矫正
+								double correctAlpha, correctBeta, correctGamma;// 矫正参数
+								correctAlpha = alpha / camera->ViewTransform(vertex[triangle[nTriangle].vertexIndex[0]]).z;
+								correctBeta = beta / camera->ViewTransform(vertex[triangle[nTriangle].vertexIndex[1]]).z;
+								correctGamma = gamma / camera->ViewTransform(vertex[triangle[nTriangle].vertexIndex[2]]).z;
+								// 当前点的世界空间坐标
+								CP3 currentWorldPoint;
+								currentWorldPoint = (
+									correctAlpha * vertex[triangle[nTriangle].vertexIndex[0]]
+									+ correctBeta * vertex[triangle[nTriangle].vertexIndex[1]]
+									+ correctGamma * vertex[triangle[nTriangle].vertexIndex[2]]
+									) / (correctAlpha + correctBeta + correctGamma);
+								// 当前点世界空间法向
+								CVector3 currentNormal;
+								currentNormal = ((
+									correctAlpha * normal[triangle[nTriangle].normalIndex[0]]
+									+ correctBeta * normal[triangle[nTriangle].normalIndex[1]]
+									+ correctGamma * normal[triangle[nTriangle].normalIndex[2]]
+									) / (correctAlpha + correctBeta + correctGamma)).Normalized();
+								// 当前点的世界空间纹理坐标
+								CT2 t = (
+									correctAlpha * textureCoord[triangle[nTriangle].textureIndex[0]]
+									+ correctBeta * textureCoord[triangle[nTriangle].textureIndex[1]]
+									+ correctGamma * textureCoord[triangle[nTriangle].textureIndex[2]]
+									) / (correctAlpha + correctBeta + correctGamma);
+
+								if (targetTexture != NULL)// 若纹理存在
+								{
+									CRGB diffuseColor = targetTexture->SampleTexture(t);
+									material->SetDiffuseRef(diffuseColor);
+								}
+
+								CMaterial mat = MatNametoMat[triangle[nTriangle].materialName];
+								CRGB I = scene->SimpleIlluminate(currentWorldPoint, camera->GetEye(), currentNormal, &mat);
+								I.Reinhard();
+								//I.Normalize();
+								//pDC->SetPixelV(x, y, CRGBtoRGB(I));
+								frameBuffer->SetPixel(x, y, I);
+							}
+						}
+					}
+				}
+			}
+		}
+
 	}
 }

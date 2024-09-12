@@ -45,5 +45,7 @@ public:
 
 	// Info
 	CString name;// ²ÄÖÊÃû³Æ
+
+
 };
 

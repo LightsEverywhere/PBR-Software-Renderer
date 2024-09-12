@@ -22,21 +22,21 @@ void CMaterialSlot::ReadMaterials(CString mtlPath)
 	}
 
 	CString strLine;
-	bool inMaterial = false;
+	bool bInMaterial = false;
 	CMaterial newMaterial;
 
 	while (file.ReadString(strLine))
 	{
 		strLine.Trim();
 
-		if (strLine.Find(CString("newmtl")))
+		if (strLine.Left(7) == "newmtl ")
 		{
-			if (inMaterial)
+			if (bInMaterial)
 				Materials.push_back(newMaterial);
 
 			newMaterial = CMaterial();
 			newMaterial.name = strLine.Mid(7);
-			inMaterial = true;
+			bInMaterial = true;
 		}
 		else if (strLine.Left(3) == "Ns ")
 		{
@@ -44,28 +44,28 @@ void CMaterialSlot::ReadMaterials(CString mtlPath)
 		}
 		else if (strLine.Left(3) == "Ka ")
 		{
-			_stscanf_s(strLine.Mid(3), _T("%f, %f, %f"),
+			_stscanf_s(strLine.Mid(3), _T("%lf %lf %lf"),
 				&newMaterial.ambientRef.red,
 				&newMaterial.ambientRef.green,
 				&newMaterial.ambientRef.blue);
 		}
 		else if (strLine.Left(3) == "Kd ")
 		{
-			_stscanf_s(strLine.Mid(3), _T("%f, %f, %f"),
+			_stscanf_s(strLine.Mid(3), _T("%lf %lf %lf"),
 				&newMaterial.diffuseRef.red,
 				&newMaterial.diffuseRef.green,
 				&newMaterial.diffuseRef.blue);
 		}
 		else if (strLine.Left(3) == "Ks ")
 		{
-			_stscanf_s(strLine.Mid(3), _T("%f, %f, %f"),
+			_stscanf_s(strLine.Mid(3), _T("%lf %lf %lf"),
 				&newMaterial.specularRef.red,
 				&newMaterial.specularRef.green,
 				&newMaterial.specularRef.blue);
 		}
 		else if (strLine.Left(3) == "Ke ")
 		{
-			_stscanf_s(strLine.Mid(3), _T("%f, %f, %f"),
+			_stscanf_s(strLine.Mid(3), _T("%lf %lf %lf"),
 				&newMaterial.emissiveCol.red,
 				&newMaterial.emissiveCol.green,
 				&newMaterial.emissiveCol.blue);
@@ -82,9 +82,10 @@ void CMaterialSlot::ReadMaterials(CString mtlPath)
 		{
 			newMaterial.illuminationModel = _ttoi(strLine.Mid(6));
 		}
+		//else if(strLine.Left()
 	}
 
-	if (inMaterial)
+	if (bInMaterial)
 	{
 		Materials.push_back(newMaterial);
 	}

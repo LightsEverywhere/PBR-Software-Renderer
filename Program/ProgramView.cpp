@@ -284,7 +284,8 @@ void CProgramView::DrawObject(CDC* pDC, CCanvas* frameBuffer)
 				model->SetMaterial(&material);
 				model->SetScene(&scene);
 				model->SetZBuffer(pZBuffer);
-				model->BlinnPhongShader(pDC, frameBuffer);
+				//model->BlinnPhongShader(pDC, frameBuffer);
+				model->BlinnPhongUseMTL(pDC, frameBuffer);
 				delete pZBuffer;
 			}
 			break;
@@ -455,6 +456,8 @@ void CProgramView::OnImportObj()
 		model->ReadFaceWithMat();
 		//model->ReadTriangle();
 		model->ReadTriangleWithMat();
+		model->ReadMaterials();
+
 		transform.SetMatrix(model->vertex, model->nTotalVertex);
 		transform.Translate(-model->centerPoint.x, -model->centerPoint.y, -model->centerPoint.z);//将模型移至屏幕中心点
 		double scaleX = 160 / model->modelLength;//计算合适的缩放比例
