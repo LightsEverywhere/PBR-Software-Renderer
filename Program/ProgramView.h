@@ -55,6 +55,7 @@ protected:
 	} drawingMode;
 	CTransform3 transform;// 变换对象
 	CMaterial material;// (BRDF)名称待定
+	CTexture* diffuseTex;
 	CTexture* albedoTex;
 	CTexture* normalTex;
 	CTexture* roughnessTex;
