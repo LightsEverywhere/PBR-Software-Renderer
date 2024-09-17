@@ -46,5 +46,7 @@ public:
 	int nTotalLevel;// mipmap级数
 
 	BOOL isHDRi;
+
+	CString name;// 纹理名称
 };
 
