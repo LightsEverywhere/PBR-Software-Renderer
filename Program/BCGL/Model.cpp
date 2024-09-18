@@ -222,12 +222,19 @@ void CModel::ReadMaterials(void)
 
 void CModel::ReadTextures(void)
 {
-	CString mtlFileName;
-	mtlFileName = fileName.Left(fileName.ReverseFind(_T('.'))) + _T(".mtl");
+	CString mtlDirectoryPath;
+	mtlDirectoryPath = fileName.Left(fileName.ReverseFind(_T('\\')));
 
 	for (auto mat : materialSlot.Materials)
 	{
-		if(mat.);
+		if(mat.ambientTextureName!="");
+		{
+			TCHAR imgFullFilePath[MAX_PATH] = { 0 };
+			PathCombine(imgFullFilePath, mtlDirectoryPath, mat.ambientTextureName);
+			TextureNametoTexture.emplace(mat.ambientTextureName, CTexture());
+
+			TextureNametoTexture[mat.ambientTextureName].SetImagePath((std::string)CT2A(imgFullFilePath));
+		}
 	}
 }
 

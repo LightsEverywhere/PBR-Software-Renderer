@@ -12,6 +12,7 @@
 #include "MaterialSlot.h"
 #include "Material.h"
 #include <map>
+#include <string>
 
 class CModel
 {
