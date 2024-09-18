@@ -9,6 +9,9 @@
 #include"BCGL/Skybox.h"
 #include"BCGL/Canvas.h"
 
+#include <vector>
+#include <map>
+
 class CProgramView : public CView
 {
 protected: // 仅从序列化创建
@@ -55,7 +58,9 @@ protected:
 	} drawingMode;
 	CTransform3 transform;// 变换对象
 	CMaterial material;// (BRDF)名称待定
-	CTexture* diffuseTex;
+
+	std::map<CString, CTexture> TextureNametoTexture;// Map for Textures
+
 	CTexture* albedoTex;
 	CTexture* normalTex;
 	CTexture* roughnessTex;

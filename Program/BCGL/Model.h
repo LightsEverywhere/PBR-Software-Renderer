@@ -10,6 +10,7 @@
 #include"Texture.h"
 #include"Canvas.h"
 #include "MaterialSlot.h"
+#include "Material.h"
 #include <map>
 
 class CModel
@@ -21,12 +22,14 @@ public:
 	void ReadVertex(void);// 读入顶点信息
 	void ReadTexture(void);// 读入材质采样信息
 	void ReadNormal(void);// 读入法向信息
-	void ReadMaterials(void);// 读入材质信息
 	void ReadFace(void);// 读入面信息
 	void ReadFaceWithMat(void);// 读入包含材质的面信息
 	void ReadTriangle(void);// 获取片元信息
 	void ReadTriangleWithMat(void);
 	void GetScreenBox(void);// 计算模型投影后的屏幕包围盒			//可以考虑作为预处理项，直接背面剔除+面排序
+
+	void ReadMaterials(void);// 读入材质信息
+	void ReadTextures(void);// 读入纹理贴图
 
 	void BindTexture(CTexture* targetTexture);// 绑定纹理对象
 	void BindAlbedo(CTexture* targetAlbedo);// 绑定反照率贴图
@@ -73,6 +76,8 @@ public:
 	// 模型属性
 	CMaterialSlot materialSlot;// 材质槽
 	std::map<CString, CMaterial> MatNametoMat;
+
+	std::map<CString, CTexture> TextureNametoTexture;// Map for Textures
 
 	CMaterial* material;// 物体材质
 	CTexture* targetTexture;// 目标纹理

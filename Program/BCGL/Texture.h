@@ -47,6 +47,6 @@ public:
 
 	BOOL isHDRi;
 
-	CString name;// 纹理名称
+	CString fullFileName;// 纹理名称
 };
 

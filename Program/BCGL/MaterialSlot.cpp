@@ -82,7 +82,30 @@ void CMaterialSlot::ReadMaterials(CString mtlPath)
 		{
 			newMaterial.illuminationModel = _ttoi(strLine.Mid(6));
 		}
-		//else if(strLine.Left()
+		else if (strLine.Left(7) == "map_Ka ")
+		{
+			newMaterial.ambientTextureName = strLine.Mid(7);
+		}
+		else if (strLine.Left(7) == "map_Kd ")
+		{
+			newMaterial.diffuseTextureName = strLine.Mid(7);
+		}
+		else if (strLine.Left(7) == "map_Ks ")
+		{
+			newMaterial.specularTextureName = strLine.Mid(7);
+		}
+		else if (strLine.Left(7) == "map_Ke ")
+		{
+			newMaterial.emissiveTextureName = strLine.Mid(7);
+		}
+		else if (strLine.Left(7) == "map_bump")
+		{
+			newMaterial.normalTextureName = strLine.Mid(7);
+		}
+		else if (strLine.Left(5) == "bump ")
+		{
+			newMaterial.normalTextureName = strLine.Mid(5);
+		}
 	}
 
 	if (bInMaterial)

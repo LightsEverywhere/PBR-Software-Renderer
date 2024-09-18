@@ -28,6 +28,13 @@ public:
 	float refractionIdx;// 折射率 1.0~2.0 as usual
 	float dissolve;// 透明度 0.0 total transparency, 1.0 total opacity (变量名称有待修正)
 
+	CString normalTextureName;
+
+	CString ambientTextureName;
+	CString diffuseTextureName;
+	CString specularTextureName;
+	CString emissiveTextureName;
+
 	/**
 	 *  使用的光照模型
 	 *	0: 颜色不开启光照。

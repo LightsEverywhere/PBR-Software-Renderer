@@ -220,6 +220,17 @@ void CModel::ReadMaterials(void)
 	}
 }
 
+void CModel::ReadTextures(void)
+{
+	CString mtlFileName;
+	mtlFileName = fileName.Left(fileName.ReverseFind(_T('.'))) + _T(".mtl");
+
+	for (auto mat : materialSlot.Materials)
+	{
+		if(mat.);
+	}
+}
+
 void CModel::ReadFace(void)
 {
 	CStdioFile file;
