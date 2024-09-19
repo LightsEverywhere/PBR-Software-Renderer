@@ -10,6 +10,7 @@ public:
 	void SetAmbientRef(CRGB ambientRef);// 设置环境反射率
 	void SetDiffuseRef(CRGB diffuseRef);// 设置漫反射率
 	void SetSpecularRef(CRGB specularRef);// 设置镜面反射率
+	void SetEmissiveCol(CRGB emissiveCol);// 设置自发光颜色
 	void SetSpecularExponent(double n);// 设置高光指数
 
 	void SetAlbedo(CRGB albedo);// 设置反照率

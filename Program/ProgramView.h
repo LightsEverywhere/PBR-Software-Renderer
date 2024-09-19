@@ -59,8 +59,6 @@ protected:
 	CTransform3 transform;// 变换对象
 	CMaterial material;// (BRDF)名称待定
 
-	std::map<CString, CTexture> TextureNametoTexture;// Map for Textures
-
 	CTexture* albedoTex;
 	CTexture* normalTex;
 	CTexture* roughnessTex;

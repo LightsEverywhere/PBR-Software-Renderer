@@ -49,6 +49,11 @@ void CMaterial::SetSpecularRef(CRGB specularRef)
 	this->specularRef = specularRef;
 }
 
+void CMaterial::SetEmissiveCol(CRGB emissiveCol)
+{
+	this->emissiveCol = emissiveCol;
+}
+
 void CMaterial::SetSpecularExponent(double specularExponent)
 {
 	this->specularExponent = specularExponent;

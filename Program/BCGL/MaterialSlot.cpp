@@ -98,9 +98,9 @@ void CMaterialSlot::ReadMaterials(CString mtlPath)
 		{
 			newMaterial.emissiveTextureName = strLine.Mid(7);
 		}
-		else if (strLine.Left(7) == "map_bump")
+		else if (strLine.Left(9) == "map_bump ")
 		{
-			newMaterial.normalTextureName = strLine.Mid(7);
+			newMaterial.normalTextureName = strLine.Mid(9);
 		}
 		else if (strLine.Left(5) == "bump ")
 		{

@@ -457,6 +457,7 @@ void CProgramView::OnImportObj()
 		//model->ReadTriangle();
 		model->ReadTriangleWithMat();
 		model->ReadMaterials();
+		model->ReadTextures();
 
 		transform.SetMatrix(model->vertex, model->nTotalVertex);
 		transform.Translate(-model->centerPoint.x, -model->centerPoint.y, -model->centerPoint.z);//将模型移至屏幕中心点

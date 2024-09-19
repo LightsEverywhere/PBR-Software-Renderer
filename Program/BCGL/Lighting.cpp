@@ -13,7 +13,7 @@ CLighting::CLighting(void)
 	lightSource[2].lightPosition = CP3(500, 0, 1000);
 	lightSource[2].lightColor = CRGB(5.0, 5.0, 5.0);
 
-	lightSource[3].lightPosition = CP3(-700, -1000, 1000);
+	lightSource[3].lightPosition = CP3(-700, -1000, -1000);
 	lightSource[3].lightColor = CRGB(1.0, 1.0, 1.0);
 }
 

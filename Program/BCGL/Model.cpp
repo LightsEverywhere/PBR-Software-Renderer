@@ -227,14 +227,51 @@ void CModel::ReadTextures(void)
 
 	for (auto mat : materialSlot.Materials)
 	{
-		if(mat.ambientTextureName!="");
+		if (mat.ambientTextureName != "")
 		{
 			TCHAR imgFullFilePath[MAX_PATH] = { 0 };
 			PathCombine(imgFullFilePath, mtlDirectoryPath, mat.ambientTextureName);
+
 			TextureNametoTexture.emplace(mat.ambientTextureName, CTexture());
 
-			TextureNametoTexture[mat.ambientTextureName].SetImagePath((std::string)CT2A(imgFullFilePath));
+			CTexture& tex = TextureNametoTexture[mat.ambientTextureName];
+			tex.SetImagePath((std::string)CT2A(imgFullFilePath));
+			tex.ReadImageData();
 		}
+		if (mat.diffuseTextureName != "")
+		{
+			TCHAR imgFullFilePath[MAX_PATH] = { 0 };
+			PathCombine(imgFullFilePath, mtlDirectoryPath, mat.diffuseTextureName);
+
+			TextureNametoTexture.emplace(mat.diffuseTextureName, CTexture());
+
+			CTexture& tex = TextureNametoTexture[mat.diffuseTextureName];
+			tex.SetImagePath((std::string)CT2A(imgFullFilePath));
+			tex.ReadImageData();
+		}
+		if (mat.specularTextureName != "")
+		{
+			TCHAR imgFullFilePath[MAX_PATH] = { 0 };
+			PathCombine(imgFullFilePath, mtlDirectoryPath, mat.specularTextureName);
+
+			TextureNametoTexture.emplace(mat.specularTextureName, CTexture());
+
+			CTexture& tex = TextureNametoTexture[mat.specularTextureName];
+			tex.SetImagePath((std::string)CT2A(imgFullFilePath));
+			tex.ReadImageData();
+		}
+		if (mat.emissiveTextureName != "")
+		{
+			TCHAR imgFullFilePath[MAX_PATH] = { 0 };
+			PathCombine(imgFullFilePath, mtlDirectoryPath, mat.emissiveTextureName);
+
+			TextureNametoTexture.emplace(mat.emissiveTextureName, CTexture());
+
+			CTexture& tex = TextureNametoTexture[mat.emissiveTextureName];
+			tex.SetImagePath((std::string)CT2A(imgFullFilePath));
+			tex.ReadImageData();
+		}
+
 	}
 }
 
@@ -1125,13 +1162,51 @@ void CModel::BlinnPhongUseMTL(CDC* pDC, CCanvas* frameBuffer)
 									+ correctGamma * textureCoord[triangle[nTriangle].textureIndex[2]]
 									) / (correctAlpha + correctBeta + correctGamma);
 
-								if (targetTexture != NULL)// ÈôÎÆÀí´æÔÚ
+								CMaterial& mat = MatNametoMat[triangle[nTriangle].materialName];
+								if (mat.ambientTextureName != "")
 								{
-									CRGB diffuseColor = targetTexture->SampleTexture(t);
-									material->SetDiffuseRef(diffuseColor);
+									CRGB ambientColor = TextureNametoTexture[mat.ambientTextureName].SampleTexture(t);
+									mat.SetAmbientRef(ambientColor);
+								}
+								if (mat.diffuseTextureName != "")
+								{
+									CRGB diffuseColor = TextureNametoTexture[mat.diffuseTextureName].SampleTexture(t);
+									mat.SetDiffuseRef(diffuseColor);
+								}
+								if (mat.specularTextureName != "")
+								{
+									CRGB specularColor = TextureNametoTexture[mat.specularTextureName].SampleTexture(t);
+									mat.SetSpecularRef(specularColor);
+								}
+								if (mat.emissiveTextureName != "")
+								{
+									CRGB emissiveColor = TextureNametoTexture[mat.emissiveTextureName].SampleTexture(t);
+									mat.SetEmissiveCol(emissiveColor);
+								}
+								if (mat.normalTextureName != "")
+								{
+									CRGB sampColor = TextureNametoTexture[mat.emissiveTextureName].SampleTexture(t);
+									sampColor *= 2.0;
+									sampColor -= 1.0;
+									CVector3 sampNormal;
+									sampNormal.x = sampColor.red;
+									sampNormal.y = sampColor.green;
+									sampNormal.z = sampColor.blue;
+
+									CVector3 T = TBN[0];
+									CVector3 N = currentNormal;
+									T = (T - DotProduct(T, N) * N).Normalized();
+									CVector3 B = CrossProduct(N, T);
+
+									TBN[0] = T, TBN[1] = B, TBN[2] = N;
+
+									currentNormal = CVector3(
+										TBN[0].x * sampNormal.x + TBN[1].x * sampNormal.y + TBN[2].x * sampNormal.z,
+										TBN[0].y * sampNormal.x + TBN[1].y * sampNormal.y + TBN[2].y * sampNormal.z,
+										TBN[0].z * sampNormal.x + TBN[1].z * sampNormal.y + TBN[2].z * sampNormal.z
+									).Normalized();
 								}
 
-								CMaterial mat = MatNametoMat[triangle[nTriangle].materialName];
 								CRGB I = scene->SimpleIlluminate(currentWorldPoint, camera->GetEye(), currentNormal, &mat);
 								I.Reinhard();
 								//I.Normalize();
