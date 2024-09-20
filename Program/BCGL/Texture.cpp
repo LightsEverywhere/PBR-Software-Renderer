@@ -23,16 +23,17 @@ CTexture::~CTexture(void)
 		delete[] imgfData;
 		imgfData = NULL;
 	}
-	for (int nLevel = 0; nLevel < nTotalLevel; nLevel++)
-	{
-		if (mipmap[nLevel] != NULL)
-		{
-			delete[] mipmap[nLevel];
-			mipmap[nLevel] = NULL;
-		}
-	}
+	
 	if (mipmap != NULL)
 	{
+		for (int nLevel = 0; nLevel < nTotalLevel; nLevel++)
+		{
+			if (mipmap[nLevel] != NULL)
+			{
+				delete[] mipmap[nLevel];
+				mipmap[nLevel] = NULL;
+			}
+		}
 		delete[] mipmap;
 		mipmap = NULL;
 	}

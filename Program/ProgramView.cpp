@@ -433,7 +433,7 @@ BOOL CProgramView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	mainCamera.R -= zDelta ;
-	if (mainCamera.R < 425) mainCamera.R = 425;
+	if (mainCamera.R < 100) mainCamera.R = 100;
 	mainCamera.InitialParameter();
 	Invalidate(FALSE);
 	return CView::OnMouseWheel(nFlags, zDelta, pt);

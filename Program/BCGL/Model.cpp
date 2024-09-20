@@ -271,6 +271,17 @@ void CModel::ReadTextures(void)
 			tex.SetImagePath((std::string)CT2A(imgFullFilePath));
 			tex.ReadImageData();
 		}
+		if (mat.normalTextureName != "")
+		{
+			TCHAR imgFullFilePath[MAX_PATH] = { 0 };
+			PathCombine(imgFullFilePath, mtlDirectoryPath, mat.normalTextureName);
+
+			TextureNametoTexture.emplace(mat.normalTextureName, CTexture());
+
+			CTexture& tex = TextureNametoTexture[mat.normalTextureName];
+			tex.SetImagePath((std::string)CT2A(imgFullFilePath));
+			tex.ReadImageData();
+		}
 
 	}
 }
@@ -1083,26 +1094,24 @@ void CModel::BlinnPhongUseMTL(CDC* pDC, CCanvas* frameBuffer)
 		{
 			// 求TBN矩阵
 			CVector3 TBN[3];// TBN矩阵
-			if (targetNormal != NULL)
-			{
-				// UV坐标差
-				double deltaU1, deltaV1, deltaU2, deltaV2;
-				deltaU1 = (textureCoord[triangle[nTriangle].textureIndex[1]] - textureCoord[triangle[nTriangle].textureIndex[0]]).u;
-				deltaV1 = (textureCoord[triangle[nTriangle].textureIndex[1]] - textureCoord[triangle[nTriangle].textureIndex[0]]).v;
-				deltaU2 = (textureCoord[triangle[nTriangle].textureIndex[2]] - textureCoord[triangle[nTriangle].textureIndex[1]]).u;
-				deltaV2 = (textureCoord[triangle[nTriangle].textureIndex[2]] - textureCoord[triangle[nTriangle].textureIndex[1]]).v;
 
-				// 切线空间各坐标分量
-				CVector3 T, B, N;
-				CVector3 edge01, edge02;
-				edge01 = CVector3(vertex[triangle[nTriangle].vertexIndex[0]], vertex[triangle[nTriangle].vertexIndex[1]]).Normalized() * sqrt(deltaU1 * deltaU1 + deltaV1 * deltaV1);
-				edge02 = CVector3(vertex[triangle[nTriangle].vertexIndex[1]], vertex[triangle[nTriangle].vertexIndex[2]]).Normalized() * sqrt(deltaU2 * deltaU2 + deltaV2 * deltaV2);
-				T = ((deltaV2 * edge01 - deltaV1 * edge02) / (deltaU1 * deltaV2 - deltaU2 * deltaV1)).Normalized();//理论上可以不做单位化
-				B = ((deltaU1 * edge02 - deltaU2 * edge01) / (deltaU1 * deltaV2 - deltaU2 * deltaV1)).Normalized();
-				N = triangleNormal;
+			// UV坐标差
+			double deltaU1, deltaV1, deltaU2, deltaV2;
+			deltaU1 = (textureCoord[triangle[nTriangle].textureIndex[1]] - textureCoord[triangle[nTriangle].textureIndex[0]]).u;
+			deltaV1 = (textureCoord[triangle[nTriangle].textureIndex[1]] - textureCoord[triangle[nTriangle].textureIndex[0]]).v;
+			deltaU2 = (textureCoord[triangle[nTriangle].textureIndex[2]] - textureCoord[triangle[nTriangle].textureIndex[1]]).u;
+			deltaV2 = (textureCoord[triangle[nTriangle].textureIndex[2]] - textureCoord[triangle[nTriangle].textureIndex[1]]).v;
 
-				TBN[0] = T, TBN[1] = B, TBN[2] = N;
-			}
+			// 切线空间各坐标分量
+			CVector3 T, B, N;
+			CVector3 edge01, edge02;
+			edge01 = CVector3(vertex[triangle[nTriangle].vertexIndex[0]], vertex[triangle[nTriangle].vertexIndex[1]]).Normalized() * sqrt(deltaU1 * deltaU1 + deltaV1 * deltaV1);
+			edge02 = CVector3(vertex[triangle[nTriangle].vertexIndex[1]], vertex[triangle[nTriangle].vertexIndex[2]]).Normalized() * sqrt(deltaU2 * deltaU2 + deltaV2 * deltaV2);
+			T = ((deltaV2 * edge01 - deltaV1 * edge02) / (deltaU1 * deltaV2 - deltaU2 * deltaV1)).Normalized();//理论上可以不做单位化
+			B = ((deltaU1 * edge02 - deltaU2 * edge01) / (deltaU1 * deltaV2 - deltaU2 * deltaV1)).Normalized();
+			N = triangleNormal;
+
+			TBN[0] = T, TBN[1] = B, TBN[2] = N;
 
 			CP3 point[3];
 			for (int j = 0; j < 3; j++)
@@ -1185,7 +1194,7 @@ void CModel::BlinnPhongUseMTL(CDC* pDC, CCanvas* frameBuffer)
 								}
 								if (mat.normalTextureName != "")
 								{
-									CRGB sampColor = TextureNametoTexture[mat.emissiveTextureName].SampleTexture(t);
+									CRGB sampColor = TextureNametoTexture[mat.normalTextureName].SampleTextureLF(t);
 									sampColor *= 2.0;
 									sampColor -= 1.0;
 									CVector3 sampNormal;

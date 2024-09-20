@@ -10,7 +10,6 @@
 #include"BCGL/Canvas.h"
 
 #include <vector>
-#include <map>
 
 class CProgramView : public CView
 {
