@@ -64,14 +64,18 @@ void CTexture::ReadImageData()
 
 CRGB CTexture::SampleTexture(CT2 textureCoord)
 {
-	float u = textureCoord.u, v = textureCoord.v;
+	// 环绕方式 Repeat
+	float u = textureCoord.u - floor(textureCoord.u);
+	float v = textureCoord.v - floor(textureCoord.v);
+
 	int realU = ROUND((imgWidth - 1) * u);
 	int realV = ROUND((imgHeight - 1) * (1 - v));
+
 	// 环绕方式 Clamp to Edge
-	if (realU < 0) realU = 0;
-	if (realU > (imgWidth - 1)) realU = imgWidth - 1;
-	if (realV < 0) realV = 0;
-	if (realV > (imgHeight - 1)) realV = imgHeight - 1;
+	//if (realU < 0) realU = 0;
+	//if (realU > (imgWidth - 1)) realU = imgWidth - 1;
+	//if (realV < 0) realV = 0;
+	//if (realV > (imgHeight - 1)) realV = imgHeight - 1;
 
 	int dataPosition;// 纹素坐标在imgData数组中相应的位置
 	dataPosition = (realU + realV * imgWidth) * nChannel;
@@ -90,14 +94,19 @@ CRGB CTexture::SampleTexture(CT2 textureCoord)
 
 CRGB CTexture::SampleTextureLF(CT2 textureCoord)
 {
-	float u = textureCoord.u, v = textureCoord.v;
+	// 环绕方式 Repeat
+	float u = textureCoord.u - floor(textureCoord.u);
+	float v = textureCoord.v - floor(textureCoord.v);
+
 	float realU = ((imgWidth - 1) * u);
 	float realV = ((imgHeight - 1) * (1 - v));
+
 	// 环绕方式 Clamp to Edge
-	if (realU < 0) realU = 0;
-	if (realU > (imgWidth - 1)) realU = imgWidth - 1;
-	if (realV < 0) realV = 0;
-	if (realV > (imgHeight - 1)) realV = imgHeight - 1;
+	//if (realU < 0) realU = 0;
+	//if (realU > (imgWidth - 1)) realU = imgWidth - 1;
+	//if (realV < 0) realV = 0;
+	//if (realV > (imgHeight - 1)) realV = imgHeight - 1;
+
 	// 过滤
 	int dataPosition[3];// 纹素坐标在imgData数组中相应的位置
 	dataPosition[0] = (floor(realU) + floor(realV) * imgWidth) * nChannel;
